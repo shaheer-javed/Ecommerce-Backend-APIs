@@ -14,6 +14,19 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    dob: {
+      type: String,
+      required: false,
+    },
+    Name: {
+      type: String,
+      required: false,
+    },
+    contact_info: {
+      type: String,
+      required: false,
+    },
+    
   },
   { timestamps: true }
 );

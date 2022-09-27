@@ -1,6 +1,6 @@
 require('dotenv').config()
 const JWT = require("jsonwebtoken")
-const ExtractJwt = require("passport-jwt").ExtractJwt;
+// const ExtractJwt = require("passport-jwt").ExtractJwt;
 const VALIDATION_TOKEN = process.env.VALIDATION_TOKEN
 
 module.exports = async (req, res, next) => {
@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
         try {
             //verify token
             let user = await JWT.verify(token, VALIDATION_TOKEN);
-            req.user = user.username;
+            req.user = user;
             next()
         } catch (err) {
             return res.status(401).json({ msg: "Unable to Auth " + err })

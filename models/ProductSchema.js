@@ -4,27 +4,31 @@ const productSchema = mongoose.Schema(
     {
       title: {
         type: String,
-        required: true,
+        required: false,
       },
       description: {
         type: String,
-        required: true,
+        required: false,
       },
       owner: {
         type: String,
-        required: true,
+        required: false,
+      },
+      owner_id: {
+        type: String,
+        required: false,
       },
       price: {
         type: String,
-        required: true,
+        required: false,
       },
       tags: {
         type: String,
-        required: true,
+        required: false,
       },
       isScrap: {
         type: Boolean,
-        required: true,
+        required: false,
       },
     },
     { timestamps: true }

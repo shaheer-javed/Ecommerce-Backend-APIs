@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 
 const LoginRouter = require('./routes/LoginRoutes')
 const Products = require('./routes/Products')
+const User = require('./routes/user')
 
 const app = express();
 
@@ -28,6 +29,7 @@ const checkAuth = require("./middlewares/checkAuth");
 
 //Routes
 app.use('/api', LoginRouter);
+app.use('/user', User);
 app.use('/products',checkAuth, Products);
 
 const port = process.env.PORT || 5001
