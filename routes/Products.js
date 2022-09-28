@@ -46,7 +46,7 @@ router.post("/new", async (req, res) => {
 });
 
 router.put("/edit", async (req, res) => {
-  const { title, description, price, tags, isScrap,_id } = req.body;
+  const { title, description, price, tags, isScrap } = req.body;
 
   let product = await Product.findOne({ title });
 

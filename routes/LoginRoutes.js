@@ -28,17 +28,16 @@ router.post("/register", async (req, res) => {
       newUser.password = hash;
       const savedUser = await newUser.save();
       if (savedUser) {
-        // return res.status(200).json({ msg: "user successfully saved" });
+        const id = newUser._id;
+
+        const token = await JWT.sign({ id, username }, VALIDATION_TOKEN, {
+          expiresIn: 360000,
+        });
+
+        res.status(200).json({ savedUser, token });
       }
     });
   });
-  const id = newUser._id;
-
-  const token = await JWT.sign({ id, username }, VALIDATION_TOKEN, {
-    expiresIn: 360000,
-  });
-
-  res.status(200).json({ savedUser, token });
 });
 
 router.post("/login", async (req, res) => {
@@ -59,7 +58,7 @@ router.post("/login", async (req, res) => {
       expiresIn: 360000,
     });
 
-    res.status(200).json({ user,token });
+    res.status(200).json({ user, token });
     // return res.status(400).json({ msg: "You have logged in successfully" });
   } else {
     return res.status(400).json({ msg: "invalid credentials" });
