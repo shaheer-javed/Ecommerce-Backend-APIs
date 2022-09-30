@@ -15,16 +15,23 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res)=>{
+  const id = req.params.id;
+  const product = await Product.findOne({ id });
+  if (product == "") {
+    res.status(200).json({ Note: "No product to show" });
+  } else if (product) {
+    res.status(200).json({ product });
+  } else {
+    res.status(400).json({ err: "Unable to get product" });
+  }
+})
+
 router.post("/new", async (req, res) => {
   const { title, description, price, tags, isScrap } = req.body;
 
   const owner = req.user.username;
   const owner_id = req.user.id;
-
-  // console.log(owner)
-  // console.log(owner_id)
-
-  // console.log(req.user);
 
   const newProduct = new Product({
     title,
