@@ -31,7 +31,7 @@ const checkAuth = require("./middlewares/checkAuth");
 //Routes
 app.use('/api', LoginRouter);
 app.use('/user', User);
-app.use('/products',checkAuth, Products);
+app.use('/products', Products);
 app.use('/orders',checkAuth, Order);
 
 const port = process.env.PORT || 5001
