@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+var baseUrl = require('base-url');
+
 
 const LoginRouter = require('./routes/LoginRoutes')
 const Products = require('./routes/Products')
@@ -29,10 +31,12 @@ app.get("/", async (req, res) => {
 const checkAuth = require("./middlewares/checkAuth");
 
 //Routes
-app.use('/api', LoginRouter);
+app.use('/', LoginRouter);
 app.use('/user', User);
 app.use('/products', Products);
 app.use('/orders',checkAuth, Order);
+
+app.use(baseUrl('/api'));
 
 const port = process.env.PORT || 5001
 
