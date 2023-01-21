@@ -23,6 +23,8 @@ mongoose
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.log(err));
 
+app.use(baseUrl('/api'));
+
 app.get("/", async (req, res) => {
   res.send("hi")
 })
@@ -36,7 +38,7 @@ app.use('/user', User);
 app.use('/products', Products);
 app.use('/orders',checkAuth, Order);
 
-app.use(baseUrl('/api'));
+
 
 const port = process.env.PORT || 5001
 
