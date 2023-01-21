@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-var baseUrl = require('base-url');
 
 
 const LoginRouter = require('./routes/LoginRoutes')
@@ -23,7 +22,10 @@ mongoose
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.log(err));
 
-app.use(baseUrl('/api'));
+app.use((req, res, next) => {
+  req.baseUrl = `/api`;
+  next();
+});
 
 app.get("/", async (req, res) => {
   res.send("hi")
