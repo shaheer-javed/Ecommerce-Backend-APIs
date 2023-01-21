@@ -27,6 +27,10 @@ mongoose
 //   next();
 // });
 
+app.use('/api', (req, res, next) => {
+    next();
+});
+
 app.get("/", async (req, res) => {
   res.send("hi")
 })
@@ -40,7 +44,7 @@ app.use('/user', User);
 app.use('/products', Products);
 app.use('/orders',checkAuth, Order);
 
-app.use('/api', app);
+// app.use('/api', app);
 
 const port = process.env.PORT || 5001
 
