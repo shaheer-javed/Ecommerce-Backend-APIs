@@ -22,14 +22,13 @@ mongoose
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.log(err));
 
-app.use((req, res, next) => {
-  req.baseUrl = `/api`;
-  next();
-});
+// app.use((req, res, next) => {
+//   req.baseUrl = `/api`;
+//   next();
+// });
 
 app.get("/", async (req, res) => {
-//   res.send("hi")
-  res.send(`Base URL: ${req.baseUrl}`);
+  res.send("hi")
 })
 
 //checkAuth middleware
@@ -41,7 +40,7 @@ app.use('/user', User);
 app.use('/products', Products);
 app.use('/orders',checkAuth, Order);
 
-
+app.use('/api', app);
 
 const port = process.env.PORT || 5001
 
