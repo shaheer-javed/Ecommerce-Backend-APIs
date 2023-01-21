@@ -28,7 +28,8 @@ app.use((req, res, next) => {
 });
 
 app.get("/", async (req, res) => {
-  res.send("hi")
+//   res.send("hi")
+  res.send(`Base URL: ${req.baseUrl}`);
 })
 
 //checkAuth middleware
