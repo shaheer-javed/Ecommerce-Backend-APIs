@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-
+const router = express.Router();
 
 const LoginRouter = require('./routes/LoginRoutes')
 const Products = require('./routes/Products')
@@ -27,11 +27,11 @@ mongoose
 //   next();
 // });
 
-app.use('/api', (req, res, next) => {
-    next();
-});
+// app.use('/api', (req, res, next) => {
+//     next();
+// });
 
-app.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
   res.send("hi")
 })
 
@@ -39,12 +39,12 @@ app.get("/", async (req, res) => {
 const checkAuth = require("./middlewares/checkAuth");
 
 //Routes
-app.use('/', LoginRouter);
-app.use('/user', User);
-app.use('/products', Products);
-app.use('/orders',checkAuth, Order);
+router.use('/', LoginRouter);
+router.use('/user', User);
+router.use('/products', Products);
+router.use('/orders',checkAuth, Order);
 
-// app.use('/api', app);
+app.use('/api', router);
 
 const port = process.env.PORT || 5001
 
