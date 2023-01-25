@@ -7,12 +7,12 @@ module.exports = async (req, res, next) => {
     
     if (req.headers.authorization){
 
-        // let token = req.header.authorization.split(' ')[1]
+        let token = req.header.authorization.split(' ')[1]
         // const token = String(ExtractJwt.fromAuthHeaderAsBearerToken());
         // console.log(token)
 
 //         const token = req.header("x-auth-token")
-        const token = req.headers.authorization;
+//         const token = req.headers.authorization;
         if (!token) {
             return res.status(401).json({ msg: "Unable to Auth" })
         }
