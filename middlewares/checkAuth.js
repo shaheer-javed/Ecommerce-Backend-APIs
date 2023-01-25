@@ -5,7 +5,7 @@ const VALIDATION_TOKEN = process.env.VALIDATION_TOKEN
 
 module.exports = async (req, res, next) => {
     
-    if (req.header.authorization){
+    if (req.headers.authorization){
 
         // let token = req.header.authorization.split(' ')[1]
         // const token = String(ExtractJwt.fromAuthHeaderAsBearerToken());
