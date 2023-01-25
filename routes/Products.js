@@ -29,6 +29,7 @@ router.get("/:id", async (req, res)=>{
 
 router.post("/new", async (req, res) => {
   const { title, description, price, tags } = req.body;
+  let title =req.body.title;
 
   const owner = req.user.username;
   const owner_id = req.user.id;
