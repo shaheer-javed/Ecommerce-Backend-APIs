@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
     
     if (req.headers.authorization){
 
-        let token = req.header.authorization.split(' ')[1]
+        let token = req.headers.authorization.split(' ')[1]
         // const token = String(ExtractJwt.fromAuthHeaderAsBearerToken());
         // console.log(token)
 
