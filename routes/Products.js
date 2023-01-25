@@ -28,10 +28,12 @@ router.get("/:id", async (req, res)=>{
 })
 
 router.post("/new", async (req, res) => {
-  const { title, description, price, tags, isScrap } = req.body;
+  const { title, description, price, tags } = req.body;
 
   const owner = req.user.username;
   const owner_id = req.user.id;
+  
+  let isScrap = true;
 
   const newProduct = new Product({
     title,
