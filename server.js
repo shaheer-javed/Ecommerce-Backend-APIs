@@ -41,7 +41,7 @@ const checkAuth = require("./middlewares/checkAuth");
 //Routes
 router.use('/', LoginRouter);
 router.use('/user', User);
-router.use('/products', Products);
+router.use('/products',checkAuth, Products);
 router.use('/orders',checkAuth, Order);
 
 app.use('/api', router);
