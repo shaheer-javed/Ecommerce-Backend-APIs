@@ -66,7 +66,6 @@ router.post("/login", async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  localStorage.removeItem("artsy-jwt");
    res.status(200).json({ message: "Logged out successfully" });
 });
 
