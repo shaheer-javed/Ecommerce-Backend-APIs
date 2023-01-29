@@ -66,8 +66,8 @@ router.post("/login", async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.session.destroy();
-  localStorage.removeItem("artsy-jwt")
+  localStorage.removeItem("artsy-jwt");
+   res.status(200).json({ message: "Logged out successfully" });
 });
 
 module.exports = router;
