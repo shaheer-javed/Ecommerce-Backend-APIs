@@ -65,4 +65,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  localStorage.removeItem("artsy-jwt")
+});
+
 module.exports = router;
