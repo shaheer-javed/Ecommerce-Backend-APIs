@@ -26,7 +26,7 @@ mongoose
 
 
 router.get("/", async (req, res) => {
-  res.send("hi")
+  res.send("/api routes working")
 })
 
 //checkAuth middleware
