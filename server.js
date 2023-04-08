@@ -8,6 +8,7 @@ const LoginRouter = require('./routes/LoginRoutes')
 const Products = require('./routes/Products')
 const User = require('./routes/user')
 const Order = require('./routes/order')
+const Test = require('./routes/test')
 
 const app = express();
 
@@ -22,14 +23,7 @@ mongoose
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.log(err));
 
-// app.use((req, res, next) => {
-//   req.baseUrl = `/api`;
-//   next();
-// });
 
-// app.use('/api', (req, res, next) => {
-//     next();
-// });
 
 router.get("/", async (req, res) => {
   res.send("hi")
@@ -43,6 +37,7 @@ router.use('/', LoginRouter);
 router.use('/user', User);
 router.use('/products',checkAuth, Products);
 router.use('/orders',checkAuth, Order);
+router.use('/test', Test);
 
 app.use('/api', router);
 
