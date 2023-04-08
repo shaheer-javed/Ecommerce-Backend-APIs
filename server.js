@@ -25,7 +25,7 @@ mongoose
 
 
 
-app.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
   res.send("hi")
 })
 
