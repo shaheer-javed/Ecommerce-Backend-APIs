@@ -2,6 +2,7 @@
 const Product = require("../models/ProductSchema");
 const express = require("express");
 const router = express.Router();
+const checkAuth = require("../middlewares/checkAuth");
 
 router.get("/", async (req, res) => {
   const allProducts = await Product.find();
@@ -15,7 +16,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res)=>{
+router.get("/myproducts",checkAuth, async (req, res) => {
+   const owner = req.user.username;
+  const myproducts = await Product.find({owner});
+  if (myproducts == "") {
+    res.status(200).json({ Note: "No products to show" });
+  } else if (myproducts) {
+    res.status(200).json({ Status: "got all products", myproducts });
+  } else {
+    res.status(400).json({ err: "Unable to get products" });
+  }
+});
+
+router.get("/:id",checkAuth, async (req, res)=>{
   const id = req.params.id;
   const product = await Product.findOne({ id });
   if (product == "") {
@@ -27,7 +40,7 @@ router.get("/:id", async (req, res)=>{
   }
 })
 
-router.post("/new", async (req, res) => {
+router.post("/new",checkAuth, async (req, res) => {
   const { description, price, tags } = req.body;
   let title =req.body.title;
 
@@ -55,7 +68,7 @@ router.post("/new", async (req, res) => {
   }
 });
 
-router.put("/edit", async (req, res) => {
+router.put("/edit",checkAuth, async (req, res) => {
   const { title, description, price, tags, isScrap } = req.body;
 
   let product = await Product.findOne({ title });
@@ -75,20 +88,5 @@ router.put("/edit", async (req, res) => {
   }
 });
 
-
-router.get("/myproducts", async (req, res) => {
-
-  const owner = req.user.username;
-  const myproducts = await Product.find({owner});
-  if (myproducts == "") {
-    res.status(200).json({ Note: "No products to show" });
-  } else if (myproducts) {
-    res.status(200).json({ myproducts });
-  } else {
-    res.status(400).json({ err: "Unable to get products" });
-  }
-});
-
-
-
 module.exports = router;
+
