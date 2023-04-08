@@ -2,7 +2,7 @@ const Product = require("../models/ProductSchema");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/myproducts", async (req, res) => {
 
 });
 
