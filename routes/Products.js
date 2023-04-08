@@ -75,4 +75,20 @@ router.put("/edit", async (req, res) => {
   }
 });
 
+
+router.get("/myproducts", async (req, res) => {
+
+  const owner = req.user.username;
+  const myproducts = await Product.find({username:owner});
+  if (myproducts == "") {
+    res.status(200).json({ Note: "No products to show" });
+  } else if (myproducts) {
+    res.status(200).json({ myproducts });
+  } else {
+    res.status(400).json({ err: "Unable to get products" });
+  }
+});
+
+
+
 module.exports = router;
