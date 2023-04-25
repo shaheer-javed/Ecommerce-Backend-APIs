@@ -28,7 +28,7 @@ router.get("/myproducts",checkAuth, async (req, res) => {
   }
 });
 
-router.get("/:id",checkAuth, async (req, res)=>{
+router.get("/:id", async (req, res)=>{
   const id = req.params.id;
   const product = await Product.findOne({ id });
   if (product == "") {
