@@ -9,6 +9,7 @@ const Products = require('./routes/Products')
 const User = require('./routes/user')
 const Order = require('./routes/order')
 const Test = require('./routes/test')
+const uploadRouter = require('./routes/uploadImage')
 
 const app = express();
 
@@ -38,6 +39,7 @@ router.use('/user', User);
 router.use('/products', Products);
 router.use('/orders',checkAuth, Order);
 router.use('/test', Test);
+router.use('/upload', uploadRouter);
 
 app.use('/api', router);
 
