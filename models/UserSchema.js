@@ -18,11 +18,19 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    Name: {
+    name: {
       type: String,
       required: false,
     },
-    contact_info: {
+    gender: {
+      type: String,
+      required: false,
+    },
+    aboutMe: {
+      type: String,
+      required: false,
+    },
+    contactInfo: {
       type: String,
       required: false,
     },

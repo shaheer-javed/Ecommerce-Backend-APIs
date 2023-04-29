@@ -96,7 +96,7 @@ router.post("/new", checkAuth, async (req, res) => {
           });
 
         if (file.photo) {
-            console.log(file.photo);
+            // console.log(file.photo);
             newProduct.photo.data = fs.readFileSync(file.photo.filepath);
             newProduct.photo.contentType = file.photo.mimetype;
         }
