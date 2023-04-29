@@ -30,11 +30,18 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    contactInfo: {
+    contactEmail: {
       type: String,
       required: false,
     },
-    
+    contactPhone: {
+      type: String,
+      required: false,
+    },
+    photo: {
+      name: String,
+      required: false,
+  },
   },
   { timestamps: true }
 );

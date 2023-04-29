@@ -1,5 +1,4 @@
 const { uploadToCloudinary } = require("../service/upload.service");
-// const { ErrorHandler } = require('../utils/errorHandler')
 const { bufferToDataURI } = require('../utils/file')
 
 const uploadImage = async (req, res, next) => {
