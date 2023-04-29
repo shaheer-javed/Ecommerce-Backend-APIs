@@ -4,8 +4,10 @@ const { bufferToDataURI } = require('../utils/file')
 
 const uploadImage = async (req, res, next) => {
   try {
+    console.log(req);
     const { file } = req
     if (!file) throw 'Image is required'
+    console.log("photo from /upload",file)
 
     const fileFormat = file.mimetype.split('/')[1]
     const { base64 } = bufferToDataURI(fileFormat, file.buffer)
