@@ -111,7 +111,7 @@ router.post("/new", checkAuth, async (req, res) => {
             newProduct.photo.data = bufferImage;
         }  */
 
-        if (file.photo != NULL) {
+        if (file.photo) {
             const imagePath = file.photo.filepath;
             const blob = fs.readFileSync(imagePath);
 
