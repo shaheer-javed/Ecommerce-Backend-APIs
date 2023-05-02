@@ -77,7 +77,7 @@ router.put("/edit", async (req, res) => {
 router.get("/info", async (req, res) => {
     const user = req.user.username;
     let person = await User.findOne({ user });
-
+    let profilePic ="";
     if (person.photo.name){
     let profilePic = await s3
         .getObject({
