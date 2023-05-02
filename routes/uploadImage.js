@@ -4,6 +4,7 @@ const { upload } = require('../service/upload.service')
 
 const router = Router()
 
-router.post('/', upload.single('image'), uploadImage)
+// router.post('/', upload.single('image'), uploadImage)
+router.post('/', upload.array('image'), uploadImage)
 
 module.exports = router

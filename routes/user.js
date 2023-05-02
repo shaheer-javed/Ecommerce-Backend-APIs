@@ -9,6 +9,30 @@ require("dotenv").config();
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 
+//get function to show user info in the form while editing
+router.get("/info", async (req, res) => {
+    // const id = req.user.id;
+    const username = req.user.username;
+    let user = await User.findOne({ username });
+    console.log(user);
+    let profilePic;
+    if (user.photo.name) {
+        profilePic = await s3
+            .getObject({
+                Bucket: process.env.AWS_BUCKET,
+                Key: user.photo.name,
+            })
+            .promise();
+    } else {
+        profilePic = "";
+    }
+    if (user) {
+        res.status(200).json({ user, profilePic });
+    } else {
+        res.status(400).json({ msg: "Unable to get user info" });
+    }
+});
+
 //edit user profile
 router.put("/edit", async (req, res) => {
     const person = req.user.username;
@@ -71,26 +95,6 @@ router.put("/edit", async (req, res) => {
             }
         });
     });
-});
-
-//get function to show user info in the form while editing
-router.get("/info", async (req, res) => {
-    const user = req.user.username;
-    let person = await User.findOne({ user });
-    let profilePic ="";
-    if (person.photo.name){
-    let profilePic = await s3
-        .getObject({
-          Bucket: process.env.AWS_BUCKET,
-            Key: person.photo.name,
-        })
-        .promise();
-    }
-    if (person) {
-        res.status(200).json({ person, profilePic });
-    } else {
-        res.status(400).json({ msg: "Unable to get user info" });
-    }
 });
 
 module.exports = router;

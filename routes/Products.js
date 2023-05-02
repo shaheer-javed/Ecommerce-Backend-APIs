@@ -125,7 +125,7 @@ router.post("/new", checkAuth, async (req, res) => {
 
             newProduct.photo.name = uploadedImage.Key;
 
-            console.log("image:::::::", uploadedImage);
+            // console.log("image:::::::", uploadedImage);
         }
 
         newProduct.save((err, result) => {

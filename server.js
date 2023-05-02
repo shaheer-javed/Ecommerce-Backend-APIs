@@ -10,7 +10,8 @@ const Products = require('./routes/Products')
 const User = require('./routes/user')
 const Order = require('./routes/order')
 const Test = require('./routes/test')
-const uploadRouter = require('./routes/uploadImage')
+// const uploadRouter = require('./routes/uploadImage')
+const uploadRouter = require('./controller/upload.controller')
 
 const app = express();
 
