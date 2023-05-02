@@ -78,13 +78,14 @@ router.get("/info", async (req, res) => {
     const user = req.user.username;
     let person = await User.findOne({ user });
 
+    if (person.photo.name){
     let profilePic = await s3
         .getObject({
           Bucket: process.env.AWS_BUCKET,
             Key: person.photo.name,
         })
         .promise();
-
+    }
     if (person) {
         res.status(200).json({ person, profilePic });
     } else {
