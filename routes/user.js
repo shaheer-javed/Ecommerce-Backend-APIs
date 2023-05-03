@@ -35,7 +35,7 @@ router.get("/info", async (req, res) => {
 
 //edit user profile
 router.put("/edit", async (req, res) => {
-    const usename = req.user.username;
+    const username = req.user.username;
     const owner_id = req.user.id;
 
     const form = new formidable.IncomingForm({
@@ -54,7 +54,7 @@ router.put("/edit", async (req, res) => {
         const { name, dob, aboutMe, contactPhone, contactEmail } =
             fields;
 
-        let user = await User.findOne({ usename });
+        let user = await User.findOne({ username });
 
         user.name = name;
         user.dob = dob;
