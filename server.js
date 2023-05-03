@@ -9,7 +9,6 @@ const LoginRouter = require('./routes/LoginRoutes')
 const Products = require('./routes/Products')
 const User = require('./routes/user')
 const Order = require('./routes/order')
-const Test = require('./routes/test')
 // const uploadRouter = require('./routes/uploadImage')
 const uploadRouter = require('./controller/upload.controller')
 
@@ -41,7 +40,6 @@ router.use('/', LoginRouter);
 router.use('/user',checkAuth, User);
 router.use('/products', Products);
 router.use('/orders',checkAuth, Order);
-router.use('/test', Test);
 router.use('/upload', uploadRouter);
 
 app.use('/api', router);
