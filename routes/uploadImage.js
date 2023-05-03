@@ -1,10 +1,24 @@
-const { Router } = require('express')
-const { uploadImage } = require('../controller/upload.controller')
-const { upload } = require('../service/upload.service')
+const express = require("express");
+const router = express.Router();
+const upload = require("../utils/multer");
+const cloudinary = require("../utils/cloudinary");
+const { bufferToDataURI } = require("../utils/dataURI");
 
-const router = Router()
+router.post("/", upload.array("image"), async (req, res) => {
+    const { files } = req;
 
-// router.post('/', upload.single('image'), uploadImage)
-router.post('/', upload.array('image'), uploadImage)
+    const urls = [];
+    for (const file of files) {
+        const fileFormat = file.mimetype.split('/')[1]
+        const { base64 } = bufferToDataURI(fileFormat, file.buffer)
+        const newPath = await cloudinary.uploads(base64, fileFormat);
+        urls.push(newPath.url);
+    }
 
-module.exports = router
+    res.json({
+        message: "Upload successful",
+        images: urls,
+    });
+});
+
+module.exports = router;

@@ -9,8 +9,7 @@ const LoginRouter = require('./routes/LoginRoutes')
 const Products = require('./routes/Products')
 const User = require('./routes/user')
 const Order = require('./routes/order')
-// const uploadRouter = require('./routes/uploadImage')
-const uploadRouter = require('./controller/upload.controller')
+const uploadRouter = require('./routes/uploadImage')
 
 const app = express();
 

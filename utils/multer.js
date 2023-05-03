@@ -1,14 +1,5 @@
 const multer = require('multer');
 
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null,'/upload')
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, new Date().toISOString()+"-"+ file.originalname)
-//     }
-// })
-
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {

@@ -6,10 +6,12 @@ const fs = require("fs");
 const formidable = require("formidable");
 require("dotenv").config();
 
-//S3
-const AWS = require("aws-sdk");
-const s3 = new AWS.S3();
+//cloudinary
+const upload = require("../utils/multer");
+const cloudinary = require("../utils/cloudinary");
+const { bufferToDataURI } = require("../utils/dataURI");
 
+// View all products
 router.get("/", async (req, res) => {
     const allProducts = await Product.find();
 
@@ -22,6 +24,7 @@ router.get("/", async (req, res) => {
     }
 });
 
+// View all products of a specific user
 router.get("/myproducts", checkAuth, async (req, res) => {
     const owner = req.user.username;
     const myproducts = await Product.find({ owner });
@@ -34,6 +37,7 @@ router.get("/myproducts", checkAuth, async (req, res) => {
     }
 });
 
+// Get 1 product
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
     const product = await Product.findOne({ id });
@@ -46,6 +50,65 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+// Add a new product
+// add auth here
+router.post("/new",checkAuth, async (req, res) => {
+    const owner = req.user.username;
+    const owner_id = req.user.id;
+    const form = new formidable.IncomingForm({
+        multiples: true,
+        keepExtensions: true,
+    });
+
+    // Parsing
+    form.parse(req, async (err, fields, file) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Image could not be uploaded",
+            });
+        }
+
+        const { title, description, price, tags, isScrap } = fields;
+
+        const newProduct = new Product({
+            title,
+            description,
+            owner,
+            owner_id,
+            price,
+            tags,
+            isScrap,
+        });
+
+        if (file.photo) {
+
+            const urls = [];
+            for (const image of file.photo) {
+                const fileFormat = image.mimetype.split("/")[1];
+                const buff = fs.readFileSync(image.filepath); // convert img into buffer
+                const { base64 } = bufferToDataURI(fileFormat, buff);
+                const newPath = await cloudinary.uploads(base64, fileFormat);
+                urls.push(newPath.url);
+            }
+            console.log("urls = ", urls)
+
+            newProduct.photos.url = urls;
+        }
+
+        newProduct.save((err, result) => {
+            if (err) {
+                res.status(400).json({ err: "Unable to add new product" });
+            } else {
+                res.status(200).json({
+                    Status: "Saved successfully",
+                    result,
+                });
+            }
+        });
+    });
+});
+
+// Edit a product
 router.put("/edit", checkAuth, async (req, res) => {
     const { title, description, price, tags, isScrap } = req.body;
 
@@ -64,81 +127,6 @@ router.put("/edit", checkAuth, async (req, res) => {
     } else {
         res.status(400).json({ err: "Unable to edit product" });
     }
-});
-
-router.post("/new", checkAuth, async (req, res) => {
-    const owner = req.user.username;
-    const owner_id = req.user.id;
-    const form = new formidable.IncomingForm({
-        multiples: true,
-        keepExtensions: true,
-    });
-
-    // Parsing
-    form.parse(req, async (err, fields, file) => {
-        if (err) {
-            return res.status(400).json({
-                error: "Image could not be uploaded",
-            });
-        }
-
-        const { title, description, price, tags, isScrap } = fields;
-
-        // let newProduct = new Product(owner,owner_id,fields);
-        const newProduct = new Product({
-            title,
-            description,
-            owner,
-            owner_id,
-            price,
-            tags,
-            isScrap,
-        });
-
-        /*
-        if (file.photo) {
-            // console.log(file.photo);
-            const fileFormat = file.photo.mimetype.split("/")[1];
-            newProduct.photo.contentType = fileFormat;
-            // const buffer = fs.readFileSync(file.photo.filepath)
-            // const { base64 } = bufferToDataURI(fileFormat, file.photo.path);
-            // newProduct.photo.data = fs.readFileSync(file.photo.filepath);
-            // newProduct.photo.data = fs.readFileSync(base64);
-            // newProduct.photo.contentType = file.photo.mimetype;
-            let imageString = fs.readFileSync(file.photo.filepath);;
-            let encodeImage = imageString.toString("base64");
-            let bufferImage = Buffer.from(encodeImage, "base64");
-            newProduct.photo.data = bufferImage;
-        }  */
-
-        if (file.photo) {
-            const imagePath = file.photo.filepath;
-            const blob = fs.readFileSync(imagePath);
-
-            const uploadedImage = await s3
-                .upload({
-                    Bucket: process.env.AWS_BUCKET,
-                    Key: owner_id + Date.now()+file.photo.originalFilename ,
-                    Body: blob,
-                })
-                .promise();
-
-            newProduct.photo.name = uploadedImage.Key;
-
-            // console.log("image:::::::", uploadedImage);
-        }
-
-        newProduct.save((err, result) => {
-            if (err) {
-                res.status(400).json({ err: "Unable to add new product" });
-            } else {
-                res.status(200).json({
-                    Status: "Saved successfully",
-                    result,
-                });
-            }
-        });
-    });
 });
 
 module.exports = router;
