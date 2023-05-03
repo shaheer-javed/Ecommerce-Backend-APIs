@@ -11,10 +11,8 @@ const s3 = new AWS.S3();
 
 //get function to show user info in the form while editing
 router.get("/info", async (req, res) => {
-    // const id = req.user.id;
     const username = req.user.username;
     let user = await User.findOne({ username });
-    console.log(user);
     let profilePic;
     if (user.photo.name) {
         profilePic = await s3
@@ -51,7 +49,7 @@ router.put("/edit", async (req, res) => {
             });
         }
 
-        const { name, dob, aboutMe, contactPhone, contactEmail } =
+        const { name, dob, aboutMe, contactPhone, address } =
             fields;
 
         let user = await User.findOne({ username });
@@ -60,11 +58,11 @@ router.put("/edit", async (req, res) => {
         user.dob = dob;
         user.aboutMe = aboutMe;
         user.contactPhone = contactPhone;
-        user.contactEmail = contactEmail;
+        user.address = address;
 
         if (file.photo) {
             const imagePath = file.photo.filepath;
-            const blob = fs.readFileSync(imagePath);
+            const blob = fs.readFileSync(imagePath); //converts file into buffer
 
             const uploadedImage = await s3
                 .upload({
@@ -80,7 +78,6 @@ router.put("/edit", async (req, res) => {
                 .promise();
 
             user.photo.name = uploadedImage.Key;
-            // console.log("image:::::::", uploadedImage);
         }
 
         user.save((err, result) => {

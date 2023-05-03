@@ -26,11 +26,8 @@ const productSchema = mongoose.Schema(
             type: String,
             required: false,
         },
-        photo: {
-            // data:Buffer,
-            // // data:String,
-            // contentType:String,
-            name: String,
+        photos: {
+            url: [String],
             required: false,
         },
         isScrap: {

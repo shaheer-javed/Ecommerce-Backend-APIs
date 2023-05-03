@@ -1,7 +1,4 @@
-const cloudinary = require('cloudinary')
-const dotenv = require('dotenv');
-
-dotenv.config();
+const cloudinary = require("cloudinary");
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -9,14 +6,16 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-exports.uploads = (file) => {
-    return new Promise(resolve => {
-        cloudinary.uploader.upload(file, (result)=>{
-            resolve({
-                // url:result.url,
-                url:result.secure_url,
-                // id: result.public_id
-            })
-        })
-    })
-}
+exports.uploads = async (fileString, format) => {
+    try {
+        const { uploader } = cloudinary;
+
+        const res = await uploader.upload(
+            `data:image/${format};base64,${fileString}`
+        );
+
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
