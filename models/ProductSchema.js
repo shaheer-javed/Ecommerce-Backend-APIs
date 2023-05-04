@@ -26,6 +26,14 @@ const productSchema = mongoose.Schema(
             type: String,
             required: false,
         },
+        quantity: {
+            type: String,
+            required: false,
+        },
+        estimatedWeight: {
+            type: String,
+            required: false,
+        },
         photo: {
             url: [String],
             required: false,
