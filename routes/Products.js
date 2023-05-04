@@ -40,7 +40,7 @@ router.get("/myproducts", checkAuth, async (req, res) => {
 // Get 1 product
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
-    const product = await Product.findOne({ id });
+    const product = await Product.findById({ id });
     if (product == "") {
         res.status(200).json({ Note: "No product to show" });
     } else if (product) {
