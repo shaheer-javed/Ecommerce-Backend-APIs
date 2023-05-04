@@ -51,7 +51,6 @@ router.get("/:id", async (req, res) => {
 });
 
 // Add a new product
-// add auth here
 router.post("/new",checkAuth, async (req, res) => {
     const owner = req.user.username;
     const owner_id = req.user.id;
@@ -109,6 +108,7 @@ router.post("/new",checkAuth, async (req, res) => {
 });
 
 // Edit a product
+// use id from params to get the specific product
 router.put("/edit", checkAuth, async (req, res) => {
     const { title, description, price, tags, isScrap } = req.body;
 
