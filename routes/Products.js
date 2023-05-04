@@ -92,7 +92,7 @@ router.post("/new",checkAuth, async (req, res) => {
             }
             console.log("urls = ", urls)
 
-            newProduct.photos.url = urls;
+            newProduct.photo.url = urls;
         }
 
         newProduct.save((err, result) => {
