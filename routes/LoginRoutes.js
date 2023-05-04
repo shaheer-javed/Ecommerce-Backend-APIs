@@ -78,7 +78,6 @@ router.post("/register", async (req, res) => {
 
                     newUser.photo.name = uploadedImage.Key;
                 }
-                console.log(newUser);
 
                 newUser.save((err, result) => {
                     if (err) {
@@ -112,7 +111,7 @@ router.post("/login", async (req, res) => {
     if (matchPassword) {
         const id = user._id;
         const username = user.username;
-        const token = await JWT.sign({ id, username }, VALIDATION_TOKEN, {
+        const token = JWT.sign({ id, username }, VALIDATION_TOKEN, {
             expiresIn: 360000,
         });
 

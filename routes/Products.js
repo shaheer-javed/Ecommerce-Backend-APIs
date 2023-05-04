@@ -51,7 +51,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Add a new product
-router.post("/new",checkAuth, async (req, res) => {
+router.post("/new", checkAuth, async (req, res) => {
     const owner = req.user.username;
     const owner_id = req.user.id;
     const form = new formidable.IncomingForm({
@@ -67,7 +67,15 @@ router.post("/new",checkAuth, async (req, res) => {
             });
         }
 
-        const { title, description, price, tags, isScrap } = fields;
+        const {
+            title,
+            description,
+            price,
+            tags,
+            quantity,
+            estimatedWeight,
+            isScrap,
+        } = fields;
 
         const newProduct = new Product({
             title,
@@ -76,11 +84,12 @@ router.post("/new",checkAuth, async (req, res) => {
             owner_id,
             price,
             tags,
+            quantity,
+            estimatedWeight,
             isScrap,
         });
 
         if (file.photo) {
-
             const urls = [];
             for (const image of file.photo) {
                 const fileFormat = image.mimetype.split("/")[1];
@@ -89,7 +98,7 @@ router.post("/new",checkAuth, async (req, res) => {
                 const newPath = await cloudinary.uploads(base64, fileFormat);
                 urls.push(newPath.url);
             }
-            console.log("urls = ", urls)
+            console.log("urls = ", urls);
 
             newProduct.photo.url = urls;
         }
@@ -109,24 +118,64 @@ router.post("/new",checkAuth, async (req, res) => {
 
 // Edit a product
 // use id from params to get the specific product
-router.put("/edit", checkAuth, async (req, res) => {
-    const { title, description, price, tags, isScrap } = req.body;
+// router.put("/edit", checkAuth, async (req, res) => {
+router.put("/edit/:id", checkAuth, async (req, res) => {
+    const id = req.params.id;
+    const form = new formidable.IncomingForm({
+        multiples: true,
+        keepExtensions: true,
+    });
 
-    let product = await Product.findOne({ title });
+    // Parsing
+    form.parse(req, async (err, fields, file) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Image could not be uploaded",
+            });
+        }
 
-    product.title = title;
-    product.description = description;
-    product.price = price;
-    product.tags = tags;
-    product.isScrap = isScrap;
+        const {
+            title,
+            description,
+            price,
+            tags,
+            quantity,
+            estimatedWeight,
+            isScrap,
+        } = fields;
 
-    const savedProduct = await product.save();
+        let product = await Product.findOne({ id });
 
-    if (savedProduct) {
-        res.status(200).json({ Status: "Saved successfully", savedProduct });
-    } else {
-        res.status(400).json({ err: "Unable to edit product" });
-    }
+        product.title = title;
+        product.description = description;
+        product.price = price;
+        product.tags = tags;
+        product.quantity = quantity;
+        product.estimatedWeight = estimatedWeight;
+        product.isScrap = isScrap;
+
+        if (file.photo) {
+            const urls = [];
+            for (const image of file.photo) {
+                const fileFormat = image.mimetype.split("/")[1];
+                const buff = fs.readFileSync(image.filepath); // convert img into buffer
+                const { base64 } = bufferToDataURI(fileFormat, buff);
+                const newPath = await cloudinary.uploads(base64, fileFormat);
+                urls.push(newPath.url);
+            }
+            console.log("urls = ", urls);
+
+            product.photo.url = urls;
+        }
+
+        product.save((err, result) => {
+            if (err) {
+                res.status(400).json({ err: "Unable to edit product" });
+            } else {
+                res.status(200).json({ Status: "Saved successfully", result });
+            }
+        });
+    });
 });
 
 module.exports = router;
