@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const router = express.Router();
 const JWT = require("jsonwebtoken");
+const formidable = require("formidable");
+
 
 const VALIDATION_TOKEN = process.env.VALIDATION_TOKEN;
 
