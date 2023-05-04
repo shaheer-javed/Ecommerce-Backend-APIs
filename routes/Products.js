@@ -39,8 +39,8 @@ router.get("/myproducts", checkAuth, async (req, res) => {
 
 // Get 1 product
 router.get("/:id", async (req, res) => {
-    const id = req.params.id;
-    const product = await Product.findById({ id });
+    const _id = req.params.id;
+    const product = await Product.findOne({ _id });
     if (product == "") {
         res.status(200).json({ Note: "No product to show" });
     } else if (product) {
@@ -120,7 +120,8 @@ router.post("/new", checkAuth, async (req, res) => {
 // use id from params to get the specific product
 // router.put("/edit", checkAuth, async (req, res) => {
 router.put("/edit/:id", checkAuth, async (req, res) => {
-    const id = req.params.id;
+    const _id = req.params.id;
+    
     const form = new formidable.IncomingForm({
         multiples: true,
         keepExtensions: true,
@@ -144,7 +145,7 @@ router.put("/edit/:id", checkAuth, async (req, res) => {
             isScrap,
         } = fields;
 
-        let product = await Product.findOne({ id });
+        const product = await Product.findOne({ _id });
 
         product.title = title;
         product.description = description;
