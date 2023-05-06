@@ -66,7 +66,7 @@ router.post("/new", async (req, res) => {
 });
 
 //delete order
-router.delete("/delete", checkAuth, async (req, res) => {
+router.delete("/delete", async (req, res) => {
     const { product_id } = req.body;
     const owner_id = req.user.id;
     const order = await Order.findOne({ product_id });
