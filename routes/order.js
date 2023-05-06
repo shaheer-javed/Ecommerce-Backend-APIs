@@ -65,4 +65,22 @@ router.post("/new", async (req, res) => {
     }
 });
 
+//delete order
+router.delete("/delete", checkAuth, async (req, res) => {
+    const { product_id } = req.body;
+    const owner_id = req.user.id;
+    const order = await Order.findOne({ product_id });
+    if (order.owner_id == owner_id) {
+        Order.deleteOne({ product_id })
+            .then(() => {
+                res.status(200).json({ Note: "Deleted Successfully" });
+            })
+            .catch((err) => {
+                res.status(400).json({ err: "Unable to delete order", err });
+            });
+    }  else {
+        res.status(400).json({ err: "Order does not belongs to you" });
+    }
+});
+
 module.exports = router;
