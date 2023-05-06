@@ -52,11 +52,11 @@ router.get("/:id", async (req, res) => {
 
 //delete Product by owner
 router.delete("/delete/:id", checkAuth, async (req, res) => {
-    const _id = req.params.id;
+    const id = req.params.id;
     const owner = req.user.username;
-    const product = await Product.findOne({ _id });
+    const product = await Product.findOne({ id });
     if (product.owner == owner) {
-        Product.deleteOne({ _id })
+        Product.deleteOne({ id })
             .then(() => {
                 res.status(200).json({ Note: "Deleted Successfully" });
             })
@@ -116,7 +116,7 @@ router.post("/new", checkAuth, async (req, res) => {
                 const newPath = await cloudinary.uploads(base64, fileFormat);
                 urls.push(newPath.url);
             }
-            console.log("urls = ", urls);
+            // console.log("urls = ", urls);
 
             newProduct.photo.url = urls;
         }

@@ -5,9 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js",
-    "chat": "nodemon chat.js",
-    "socket": "nodemon socket.js"
+    "server": "nodemon server.js"
   },
   "author": "Shaheer Javed",
   "license": "ISC",
