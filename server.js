@@ -9,7 +9,6 @@ const LoginRouter = require("./routes/LoginRoutes");
 const Products = require("./routes/Products");
 const User = require("./routes/user");
 const Order = require("./routes/order");
-const Chat = require("./routes/chat");
 const uploadRouter = require("./routes/uploadImage");
 
 const app = express();
