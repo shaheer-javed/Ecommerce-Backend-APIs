@@ -51,8 +51,8 @@ router.get("/:id", async (req, res) => {
 });
 
 //delete Product by owner
-router.delete("/delete", checkAuth, async (req, res) => {
-    const _id = req.body.id;
+router.delete("/delete/:id", checkAuth, async (req, res) => {
+    const _id = req.params.id;
     const owner = req.user.username;
     const product = await Product.findOne({ _id });
     if (product.owner == owner) {

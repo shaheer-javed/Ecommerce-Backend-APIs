@@ -66,12 +66,12 @@ router.post("/new", async (req, res) => {
 });
 
 //delete order
-router.delete("/delete", async (req, res) => {
-    const { product_id } = req.body;
+router.delete("/delete/:id", async (req, res) => {
+    const _id = req.params.id;
     const owner_id = req.user.id;
-    const order = await Order.findOne({ product_id });
+    const order = await Order.findOne({ _id });
     if (order.owner_id == owner_id) {
-        Order.deleteOne({ product_id })
+        Order.deleteOne({ _id })
             .then(() => {
                 res.status(200).json({ Note: "Deleted Successfully" });
             })
