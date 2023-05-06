@@ -1,15 +1,16 @@
-require('dotenv').config()
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const router = express.Router();
 
-const LoginRouter = require('./routes/LoginRoutes')
-const Products = require('./routes/Products')
-const User = require('./routes/user')
-const Order = require('./routes/order')
-const uploadRouter = require('./routes/uploadImage')
+const LoginRouter = require("./routes/LoginRoutes");
+const Products = require("./routes/Products");
+const User = require("./routes/user");
+const Order = require("./routes/order");
+const Chat = require("./routes/chat");
+const uploadRouter = require("./routes/uploadImage");
 
 const app = express();
 
@@ -21,28 +22,28 @@ app.use(cors());
 const db = require("./config/key").mongoURI;
 //connect DB
 mongoose
-  .connect(db, { useNewUrlParser: true })
-  .then(() => console.log("DB connected successfully"))
-  .catch((err) => console.log(err));
-
-
+    .connect(db, { useNewUrlParser: true })
+    .then(() => console.log("DB connected successfully"))
+    .catch((err) => console.log(err));
 
 router.get("/", async (req, res) => {
-  res.send("/api routes working!!!!!")
-})
+    res.send("/api routes working!!!!!");
+});
 
 //checkAuth middleware
 const checkAuth = require("./middlewares/checkAuth");
 
 //Routes
-router.use('/', LoginRouter);
-router.use('/user',checkAuth, User);
-router.use('/products', Products);
-router.use('/orders',checkAuth, Order);
-router.use('/upload', uploadRouter);
+router.use("/", LoginRouter);
+router.use("/user", checkAuth, User);
+router.use("/products", Products);
+router.use("/orders", checkAuth, Order);
+router.use("/upload", uploadRouter);
 
-app.use('/api', router);
+app.use("/api", router);
 
-const port = process.env.PORT || 5001
+const port = process.env.PORT || 5001;
 
-app.listen(port, () => console.log(`Server running at http://localhost:${port}/api`));
+app.listen(port, () =>
+    console.log(`Server running at http://localhost:${port}/api`)
+);

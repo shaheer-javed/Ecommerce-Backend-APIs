@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "chat": "nodemon chat.js",
+    "socket": "nodemon socket.js"
   },
   "author": "Shaheer Javed",
   "license": "ISC",
@@ -23,7 +25,8 @@
     "mongoose": "^6.6.1",
     "multer": "^1.4.5-lts.1",
     "passport": "^0.6.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "socket.io": "^4.6.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

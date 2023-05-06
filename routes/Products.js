@@ -50,6 +50,24 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+//delete Product by owner
+router.delete("/delete", checkAuth, async (req, res) => {
+    const _id = req.body.id;
+    const owner = req.user.username;
+    const product = await Product.findOne({ _id });
+    if (product.owner == owner) {
+        Product.deleteOne({ _id })
+            .then(() => {
+                res.status(200).json({ Note: "Deleted Successfully" });
+            })
+            .catch((err) => {
+                res.status(400).json({ err: "Unable to delete product", err });
+            });
+    }  else {
+        res.status(400).json({ err: "Product does not belongs to you" });
+    }
+});
+
 // Add a new product
 router.post("/new", checkAuth, async (req, res) => {
     const owner = req.user.username;
@@ -121,7 +139,7 @@ router.post("/new", checkAuth, async (req, res) => {
 // router.put("/edit", checkAuth, async (req, res) => {
 router.put("/edit/:id", checkAuth, async (req, res) => {
     const _id = req.params.id;
-    
+
     const form = new formidable.IncomingForm({
         multiples: true,
         keepExtensions: true,
