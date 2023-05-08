@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const formidable = require("formidable");
+const checkAuth = require("../middlewares/checkAuth");
 require("dotenv").config();
 
 //S3
@@ -10,7 +11,7 @@ const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 
 //get function to show user info in the form while editing
-router.get("/info", async (req, res) => {
+router.get("/info", checkAuth, async (req, res) => {
     const username = req.user.username;
     let user = await User.findOne({ username });
     let profilePic;
@@ -32,7 +33,7 @@ router.get("/info", async (req, res) => {
 });
 
 //edit user profile
-router.put("/edit", async (req, res) => {
+router.put("/edit", checkAuth, async (req, res) => {
     const username = req.user.username;
     const owner_id = req.user.id;
 
@@ -49,8 +50,7 @@ router.put("/edit", async (req, res) => {
             });
         }
 
-        const { name, dob, aboutMe, contactPhone, address } =
-            fields;
+        const { name, dob, aboutMe, contactPhone, address } = fields;
 
         let user = await User.findOne({ username });
 
@@ -91,6 +91,34 @@ router.put("/edit", async (req, res) => {
             }
         });
     });
+});
+
+//function to show owner info in the product page
+router.get("/owner-info", async (req, res) => {
+    const _id = req.body.id;
+    let user = await User.findOne({ _id });
+    let profilePic;
+    if (user.photo.name) {
+        profilePic = await s3
+            .getObject({
+                Bucket: process.env.AWS_BUCKET,
+                Key: user.photo.name,
+            })
+            .promise();
+    } else {
+        profilePic = "";
+    }
+    if (user) {
+        res.status(200).json({
+            "username": user.username,
+            "addressArea": user.addressArea,
+            "addressCity": user.addressCity,
+            "contactPhone": user.contactPhone,
+            profilePic,
+        });
+    } else {
+        res.status(400).json({ msg: "Unable to get user info" });
+    }
 });
 
 module.exports = router;
