@@ -1,10 +1,15 @@
 const Product = require("../models/ProductSchema");
+const User = require("../models/UserSchema");
 const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middlewares/checkAuth");
 const fs = require("fs");
 const formidable = require("formidable");
 require("dotenv").config();
+
+//S3
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3();
 
 //cloudinary
 const upload = require("../utils/multer");
@@ -39,12 +44,36 @@ router.get("/myproducts", checkAuth, async (req, res) => {
 
 // Get 1 product
 router.get("/:id", async (req, res) => {
-    const _id = req.params.id;
+    let _id = req.params.id;
     const product = await Product.findOne({ _id });
+    // if (product) {
+        _id = product.owner_id;
+        let user = await User.findOne({ _id });
+        let profilePic;
+        if (user.photo.name) {
+            profilePic = await s3
+                .getObject({
+                    Bucket: process.env.AWS_BUCKET,
+                    Key: user.photo.name,
+                })
+                .promise();
+        } else {
+            profilePic = "";
+        }
+    // }
     if (product == "") {
         res.status(200).json({ Note: "No product to show" });
     } else if (product) {
-        res.status(200).json({ product });
+        res.status(200).json({
+            product,
+            "user": {
+                "username": user.username,
+                "addressArea": user.addressArea,
+                "addressCity": user.addressCity,
+                "contactPhone": user.contactPhone,
+                profilePic,
+            },
+        });
     } else {
         res.status(400).json({ err: "Unable to get product" });
     }
