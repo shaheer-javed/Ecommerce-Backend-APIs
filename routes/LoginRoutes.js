@@ -36,6 +36,8 @@ router.post("/register", async (req, res) => {
             dob,
             aboutme,
             contactPhone,
+            addressArea,
+            addressCity,
         } = fields;
 
         const user = await User.findOne({ email });
@@ -45,10 +47,13 @@ router.post("/register", async (req, res) => {
         const newUser = new User({
             username,
             email,
+            password,
             gender,
             dob,
             aboutme,
             contactPhone,
+            addressArea,
+            addressCity,
         });
         bcrypt.genSalt(8, (err, salt) => {
             if (err) {
