@@ -63,7 +63,7 @@ router.delete("/delete/:id", checkAuth, async (req, res) => {
             .catch((err) => {
                 res.status(400).json({ err: "Unable to delete product", err });
             });
-    }  else {
+    } else {
         res.status(400).json({ err: "Product does not belongs to you" });
     }
 });
@@ -108,17 +108,32 @@ router.post("/new", checkAuth, async (req, res) => {
         });
 
         if (file.photo) {
-            const urls = [];
-            for (const image of file.photo) {
-                const fileFormat = image.mimetype.split("/")[1];
-                const buff = fs.readFileSync(image.filepath); // convert img into buffer
+            if (file.photo instanceof Array) {
+                const urls = [];
+                for (const image of file.photo) {
+                    const fileFormat = image.mimetype.split("/")[1];
+                    const buff = fs.readFileSync(image.filepath); // convert img into buffer
+                    const { base64 } = bufferToDataURI(fileFormat, buff);
+                    const newPath = await cloudinary.uploads(
+                        base64,
+                        fileFormat
+                    );
+                    urls.push(newPath.url);
+                }
+                // console.log("urls = ", urls);
+
+                newProduct.photo.url = urls;
+            } else {
+                const urls = [];
+
+                const fileFormat = file.photo.mimetype.split("/")[1];
+                const buff = fs.readFileSync(file.photo.filepath); // convert img into buffer
                 const { base64 } = bufferToDataURI(fileFormat, buff);
                 const newPath = await cloudinary.uploads(base64, fileFormat);
                 urls.push(newPath.url);
-            }
-            // console.log("urls = ", urls);
 
-            newProduct.photo.url = urls;
+                newProduct.photo.url = urls;
+            }
         }
 
         newProduct.save((err, result) => {
@@ -136,7 +151,6 @@ router.post("/new", checkAuth, async (req, res) => {
 
 // Edit a product
 // use id from params to get the specific product
-// router.put("/edit", checkAuth, async (req, res) => {
 router.put("/edit/:id", checkAuth, async (req, res) => {
     const _id = req.params.id;
 
