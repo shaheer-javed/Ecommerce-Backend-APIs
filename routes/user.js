@@ -95,7 +95,7 @@ router.put("/edit", checkAuth, async (req, res) => {
 
 //function to show owner info in the product page
 router.get("/owner-info", async (req, res) => {
-    const _id = req.body.id;
+    const _id = req.body.owner_id;
     let user = await User.findOne({ _id });
     let profilePic;
     if (user.photo.name) {
