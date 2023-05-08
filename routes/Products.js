@@ -138,7 +138,7 @@ router.post("/new", checkAuth, async (req, res) => {
 
         newProduct.save((err, result) => {
             if (err) {
-                res.status(400).json({ err: "Unable to add new product" });
+                res.status(400).json({ err: "Unable to add new product", err });
             } else {
                 res.status(200).json({
                     Status: "Saved successfully",
