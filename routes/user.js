@@ -15,7 +15,7 @@ router.get("/info", checkAuth, async (req, res) => {
     const _id = req.params.id;
     let user = await User.findOne({ _id });
     let profilePic;
-    if (user.photo.name) {
+    if (user.photo) {
         profilePic = await s3
             .getObject({
                 Bucket: process.env.AWS_BUCKET,
@@ -99,7 +99,7 @@ router.get("/owner-info/:id", async (req, res) => {
     const _id = req.params.id;
     let user = await User.findOne({ _id });
     let profilePic;
-    if (user.photo.name) {
+    if (user.photo) {
         profilePic = await s3
             .getObject({
                 Bucket: process.env.AWS_BUCKET,
