@@ -12,10 +12,11 @@ const s3 = new AWS.S3();
 
 //get function to show user info in the form while editing
 router.get("/info", checkAuth, async (req, res) => {
-    const _id = req.params.id;
+    // const _id = req.params.id;
+    const _id = req.user.id;
     let user = await User.findOne({ _id });
     let profilePic;
-    if (user.photo) {
+    if (user.photo.name ) {
         profilePic = await s3
             .getObject({
                 Bucket: process.env.AWS_BUCKET,
