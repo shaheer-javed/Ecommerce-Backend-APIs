@@ -52,8 +52,8 @@ router.get("/product-orderd", async (req, res) => {
             //   console.log(orders);
             //   orders.forEach( async (order) => {
             for (x in orders) {
-                let _id = x.product_id;
-                const product = await Product.findOne({ _id });
+                let product_id = x.product_id;
+                const product = await Product.findOne({ product_id });
                 allOrders.push(product);
             }
             //   console.log("After async" + allOrders);
