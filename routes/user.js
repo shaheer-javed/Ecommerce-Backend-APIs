@@ -12,8 +12,8 @@ const s3 = new AWS.S3();
 
 //get function to show user info in the form while editing
 router.get("/info", checkAuth, async (req, res) => {
-    const username = req.user.username;
-    let user = await User.findOne({ username });
+    const _id = req.params.id;
+    let user = await User.findOne({ _id });
     let profilePic;
     if (user.photo.name) {
         profilePic = await s3
@@ -34,7 +34,7 @@ router.get("/info", checkAuth, async (req, res) => {
 
 //edit user profile
 router.put("/edit", checkAuth, async (req, res) => {
-    const username = req.user.username;
+    const _id = req.params.id;
     const owner_id = req.user.id;
 
     const form = new formidable.IncomingForm({
@@ -52,7 +52,7 @@ router.put("/edit", checkAuth, async (req, res) => {
 
         const { name, dob, aboutMe, contactPhone, address } = fields;
 
-        let user = await User.findOne({ username });
+        let user = await User.findOne({ _id });
 
         user.name = name;
         user.dob = dob;

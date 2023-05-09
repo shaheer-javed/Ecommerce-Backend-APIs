@@ -31,8 +31,8 @@ router.get("/", async (req, res) => {
 
 // View all products of a specific user
 router.get("/myproducts", checkAuth, async (req, res) => {
-    const owner = req.user.username;
-    const myproducts = await Product.find({ owner });
+    const owner_id = req.user.id;
+    const myproducts = await Product.find({ owner_id });
     if (myproducts == "") {
         res.status(200).json({ Note: "No products to show" });
     } else if (myproducts) {
@@ -81,11 +81,13 @@ router.get("/:id", async (req, res) => {
 
 //delete Product by owner
 router.delete("/delete/:id", checkAuth, async (req, res) => {
-    const id = req.params.id;
-    const owner = req.user.username;
-    const product = await Product.findOne({ id });
-    if (product.owner == owner) {
-        Product.deleteOne({ id })
+    const _id = req.params.id;
+    const owner_id = req.user.id;
+    const product = await Product.findOne({ _id });
+    console.log("product.owner",product.owner_id)
+    console.log("owner",owner_id)
+    if (product.owner_id == owner_id) {
+        Product.deleteOne({ _id })
             .then(() => {
                 res.status(200).json({ Note: "Deleted Successfully" });
             })
@@ -101,6 +103,7 @@ router.delete("/delete/:id", checkAuth, async (req, res) => {
 router.post("/new", checkAuth, async (req, res) => {
     const owner = req.user.username;
     const owner_id = req.user.id;
+    console.log(owner_id)
     const form = new formidable.IncomingForm({
         multiples: true,
         keepExtensions: true,
