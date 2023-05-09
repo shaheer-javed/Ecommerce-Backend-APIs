@@ -52,8 +52,8 @@ router.get("/product-orderd", async (req, res) => {
             //   console.log(orders);
             //   orders.forEach( async (order) => {
             for (x in orders) {
-                let product_id = x.product_id;
-                const product = await Product.findOne({ product_id });
+                let _id = x.product_id;
+                const product = await Product.findOne({ _id });
                 allOrders.push(product);
             }
             //   console.log("After async" + allOrders);
@@ -80,15 +80,16 @@ router.post("/new", async (req, res) => {
     const owner_id = req.user.id;
 
     let order = await Order.findOne({ product_id });
-    
-    const product_owner_id = order.owner_id;
-
 
     if (order) {
         return res
             .status(400)
             .json({ Note: "Product is already in your cart" });
     }
+
+    let _id = product_id;
+    const product = await Product.findOne({ _id });
+    const product_owner_id = product.owner_id;
 
     const newOrder = new Order({
         product_owner_id,
