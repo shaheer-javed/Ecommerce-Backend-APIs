@@ -83,20 +83,19 @@ router.post("/register", async (req, res) => {
 
                     newUser.photo.name = uploadedImage.Key;
                 }
-
-                newUser.save((err, result) => {
-                    if (err) {
-                        res.status(400).json({
-                            msg: "Unable to save User",
-                            err,
-                        });
-                    } else {
-                        res.status(200).json({
-                            msg: "user successfully saved",
-                            result,
-                        });
-                    }
-                });
+                let user = await newUser.save();
+                
+                if (user) {
+                    const id = user._id;
+                    const username = user.username;
+                    const token = JWT.sign({ id, username }, VALIDATION_TOKEN, {
+                        expiresIn: 360000,
+                    });
+            
+                    res.status(200).json({ user, token });
+                } else {
+                    res.status(400).json({ msg: "unable to save the user" });
+                }
             });
         });
     });
@@ -122,7 +121,7 @@ router.post("/login", async (req, res) => {
 
         res.status(200).json({ user, token });
     } else {
-        return res.status(400).json({ msg: "invalid credentials" });
+        res.status(400).json({ msg: "invalid credentials" });
     }
 });
 
